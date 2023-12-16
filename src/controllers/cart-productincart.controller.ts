@@ -1,3 +1,6 @@
+import {authenticate} from '@loopback/authentication';
+import {authorize} from '@loopback/authorization';
+import {inject} from '@loopback/core';
 import {
   CountSchema,
   Filter,
@@ -13,18 +16,23 @@ import {
   post,
   requestBody
 } from '@loopback/rest';
+import {SecurityBindings, securityId, UserProfile} from '@loopback/security';
 import {
-  Cart,
-  Productincart,
+  Productincart
 } from '../models';
 import {CartRepository, ProductRepository} from '../repositories';
+import {basicAuthorization} from '../services';
+
 
 export class CartProductincartController {
   constructor(
+
     @repository(CartRepository) protected cartRepository: CartRepository,
     @repository(ProductRepository) protected productRepository: ProductRepository,
   ) { }
 
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['customer'], voters: [basicAuthorization]})
   @get('/carts/{id}/productincarts', {
     responses: {
       '200': {
@@ -38,9 +46,11 @@ export class CartProductincartController {
     },
   })
   async find(
-    @param.path.string('id') id: string,
+    @inject(SecurityBindings.USER)
+    currentUserProfile: UserProfile,
     @param.query.object('filter') filter?: Filter<Productincart>,
   ): Promise<any> {
+    const id = currentUserProfile[securityId];
     const cart = await this.cartRepository.findById(id)
     const listProductInCart = this.cartRepository.productincarts(id).find();
     const listProduct = await Promise.all((await listProductInCart).map(async (productInCart) => {
@@ -58,7 +68,9 @@ export class CartProductincartController {
     }
   }
 
-  @post('/carts/{id}/{idOfProduct}/productincarts', {
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['customer'], voters: [basicAuthorization]})
+  @post('/carts/{idOfProduct}/productincarts', {
     responses: {
       '200': {
         description: 'Cart model instance',
@@ -67,7 +79,8 @@ export class CartProductincartController {
     },
   })
   async create(
-    @param.path.string('id') id: typeof Cart.prototype.id,
+    @inject(SecurityBindings.USER)
+    currentUserProfile: UserProfile,
     @param.path.string('idOfProduct') idOfProduct: string,
     @requestBody({
       content: {
@@ -81,6 +94,7 @@ export class CartProductincartController {
       },
     }) productincart: Omit<Productincart, 'id'>,
   ): Promise<any> {
+    const id = currentUserProfile[securityId]
     productincart.idOfCart = id ? id : ""
     productincart.idOfProduct = idOfProduct;
     const product = await this.productRepository.findById(idOfProduct);
@@ -104,6 +118,8 @@ export class CartProductincartController {
   }
 
 
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['customer'], voters: [basicAuthorization]})
   @del('/carts/{id}/productincarts', {
     responses: {
       '200': {
@@ -113,9 +129,11 @@ export class CartProductincartController {
     },
   })
   async delete(
-    @param.path.string('id') id: string,
+    @inject(SecurityBindings.USER)
+    currentUserProfile: UserProfile,
     @param.query.object('where', getWhereSchemaFor(Productincart)) where?: Where<Productincart>,
   ): Promise<any> {
+    const id = currentUserProfile[securityId]
     await this.cartRepository.updateById(id, {totalPrice: 0});
     await this.cartRepository.productincarts(id).delete(where);
     return this.cartRepository.findById(id)

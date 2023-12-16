@@ -1,4 +1,4 @@
-import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Product} from './product.model';
 
 @model()
@@ -21,6 +21,13 @@ export class Category extends Entity {
     required: true,
   })
   image: string;
+
+  @property({
+    type: 'string',
+    required: false,
+    default: false
+  })
+  isDeleted: boolean;
 
   @hasMany(() => Product, {keyTo: 'idOfCategory'})
   products: Product[];

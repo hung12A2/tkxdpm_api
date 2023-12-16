@@ -1,10 +1,11 @@
+import {authenticate} from '@loopback/authentication';
+import {authorize} from '@loopback/authorization';
 import {
   Filter,
   FilterExcludingWhere,
   repository
 } from '@loopback/repository';
 import {
-  del,
   get,
   getModelSchemaRef,
   param,
@@ -15,6 +16,7 @@ import {
 } from '@loopback/rest';
 import {Category} from '../models';
 import {CategoryRepository} from '../repositories';
+import {basicAuthorization} from '../services';
 
 export class CategoryController {
   constructor(
@@ -22,6 +24,8 @@ export class CategoryController {
     public categoryRepository: CategoryRepository,
   ) { }
 
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
   @post('/categories')
   @response(200, {
     description: 'Category model instance',
@@ -86,15 +90,16 @@ export class CategoryController {
   async replaceById(
     @param.path.string('id') id: string,
     @requestBody() category: Category,
-  ): Promise<void> {
+  ): Promise<any> {
     await this.categoryRepository.replaceById(id, category);
+    return this.categoryRepository.findById(id);
   }
 
-  @del('/categories/{id}')
+  @put('/categories/{id}/del')
   @response(204, {
     description: 'Category DELETE success',
   })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
-    await this.categoryRepository.deleteById(id);
+    await this.categoryRepository.updateById(id, {isDeleted: true});
   }
 }

@@ -63,6 +63,13 @@ export class Product extends Entity {
   })
   cateName: string;
 
+  @property({
+    type: 'string',
+    required: false,
+    default: false
+  })
+  isDeleted: boolean;
+
 
   constructor(data?: Partial<Product>) {
     super(data);

@@ -1,24 +1,25 @@
+import {authenticate} from '@loopback/authentication';
+import {authorize} from '@loopback/authorization';
+import {inject} from '@loopback/core';
 import {
-  Count,
   CountSchema,
   Filter,
-  repository,
-  Where,
+  repository
 } from '@loopback/repository';
 import {
   get,
   getModelSchemaRef,
-  getWhereSchemaFor,
   param,
   patch,
   post,
   requestBody
 } from '@loopback/rest';
+import {SecurityBindings, UserProfile, securityId} from '@loopback/security';
 import {
-  Order,
-  User,
+  Order
 } from '../models';
 import {CartRepository, OrderRepository, ProductRepository, UserRepository} from '../repositories';
+import {basicAuthorization} from '../services';
 
 export class UserOrderController {
   constructor(
@@ -28,7 +29,9 @@ export class UserOrderController {
     @repository(OrderRepository) protected orderRepository: OrderRepository,
   ) { }
 
-  @get('/users/{id}/orders', {
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['customer'], voters: [basicAuthorization]})
+  @get('/users/orders', {
     responses: {
       '200': {
         description: 'Array of User has many Order',
@@ -41,13 +44,75 @@ export class UserOrderController {
     },
   })
   async find(
-    @param.path.string('id') id: string,
+    @inject(SecurityBindings.USER)
+    currentUserProfile: UserProfile,
     @param.query.object('filter') filter?: Filter<Order>,
-  ): Promise<Order[]> {
-    return this.userRepository.orders(id).find(filter);
+  ): Promise<any> {
+    const id = currentUserProfile[securityId]
+    const orders = await this.userRepository.orders(id).find(filter);
+    const listOrderReturn = await Promise.all(orders.map(async (order) => {
+      const productInOrders = await this.orderRepository.productinorders(order.id).find();
+      const products = await Promise.all((productInOrders).map(async (productInOrder) => {
+        const product = await this.productRepository.findById(productInOrder.idOfProduct);
+        return {
+          ...product,
+          quantity: productInOrder.quantity,
+          totalPrice: productInOrder.quantity * product.price
+        }
+      }))
+      return {
+        ...order,
+        products: products
+      }
+    }))
+
+    return listOrderReturn;
   }
 
-  @post('/users/{id}/orders', {
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['customer'], voters: [basicAuthorization]})
+  @get('/users/orders/{idOfOrder}', {
+    responses: {
+      '200': {
+        description: 'Array of User has many Order',
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: getModelSchemaRef(Order)},
+          },
+        },
+      },
+    },
+  })
+  async findById(
+    @inject(SecurityBindings.USER)
+    currentUserProfile: UserProfile,
+    @param.path.string('idOfOrder') idOfOrder: string,
+    @param.query.object('filter') filter?: Filter<Order>,
+  ): Promise<any> {
+    const id = currentUserProfile[securityId]
+    const orders = await this.userRepository.orders(id).find({where: {id: idOfOrder}});
+    const listOrderReturn = await Promise.all(orders.map(async (order) => {
+      const productInOrders = await this.orderRepository.productinorders(order.id).find();
+      const products = await Promise.all((productInOrders).map(async (productInOrder) => {
+        const product = await this.productRepository.findById(productInOrder.idOfProduct);
+        return {
+          ...product,
+          quantity: productInOrder.quantity,
+          totalPrice: productInOrder.quantity * product.price
+        }
+      }))
+      return {
+        ...order,
+        products: products
+      }
+    }))
+
+    return listOrderReturn;
+  }
+
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['customer'], voters: [basicAuthorization]})
+  @post('/users/orders', {
     responses: {
       '200': {
         description: 'User model instance',
@@ -56,7 +121,8 @@ export class UserOrderController {
     },
   })
   async create(
-    @param.path.string('id') id: typeof User.prototype.id,
+    @inject(SecurityBindings.USER)
+    currentUserProfile: UserProfile,
     @requestBody({
       content: {
         'application/json': {
@@ -69,7 +135,7 @@ export class UserOrderController {
       },
     }) order: Omit<Order, 'id'>,
   ): Promise<any> {
-
+    const id = currentUserProfile[securityId]
     order.idOfUser = id ? id : "";
     const shippingPrice = order.shippingPrice ? order.shippingPrice : 0;
     let cartTotalPrice = (await this.userRepository.cart(id).get()).totalPrice;
@@ -81,18 +147,19 @@ export class UserOrderController {
     await this.cartRepository.productincarts(cartid).delete();
     await Promise.all(productincarts.map(async (productincart) => {
       const product = await this.productRepository.findById(productincart.idOfProduct);
+      await this.productRepository.updateById(product.id, {countInStock: (product.countInStock - productincart.quantity)})
       await this.orderRepository.productinorders(newOrder.id).create({
         idOfOrder: newOrder.id,
         idOfProduct: product.id,
         quantity: productincart.quantity
       })
-
     }))
-
     return this.userRepository.orders(id).find({where: {idOfUser: id}});
   }
 
-  @patch('/users/{id}/orders', {
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['customer'], voters: [basicAuthorization]})
+  @patch('/users/orders/{idOfOrder}/canceled', {
     responses: {
       '200': {
         description: 'User.Order PATCH success count',
@@ -101,18 +168,43 @@ export class UserOrderController {
     },
   })
   async patch(
-    @param.path.string('id') id: string,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Order, {partial: true}),
-        },
-      },
-    })
-    order: Partial<Order>,
-    @param.query.object('where', getWhereSchemaFor(Order)) where?: Where<Order>,
-  ): Promise<Count> {
-    return this.userRepository.orders(id).patch(order, where);
+    @inject(SecurityBindings.USER)
+    currentUserProfile: UserProfile,
+    @param.path.string('idOfOrder') idOfOrder: string,
+  ): Promise<any> {
+    const id = currentUserProfile[securityId]
+    await this.userRepository.orders(id).patch({isAccepted: false}, {id: idOfOrder, idOfUser: id});
+    const productInOrders = await this.orderRepository.productinorders(idOfOrder).find();
+    const productInOrdersId = productInOrders.map(productInOrder => productInOrder.id);
+    await this.orderRepository.productinorders(idOfOrder).patch({isAccepted: false}, {id: {inq: productInOrdersId}});
+    await Promise.all(productInOrders.map(async (productInOrder) => {
+      const product = await this.productRepository.findById(productInOrder.idOfProduct);
+      this.productRepository.updateById(product.id, {countInStock: (product.countInStock + productInOrder.quantity)});
+    }))
+    return await this.orderRepository.findById(idOfOrder)
   }
 
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
+  @patch('/orders/{idOfOrder}/canceled', {
+    responses: {
+      '200': {
+        description: 'User.Order PATCH success count',
+        content: {'application/json': {schema: CountSchema}},
+      },
+    },
+  })
+  async patchByAdmin(
+    @param.path.string('idOfOrder') idOfOrder: string,
+  ): Promise<any> {
+    await this.orderRepository.updateById(idOfOrder, {isAccepted: false})
+    const productInOrders = await this.orderRepository.productinorders(idOfOrder).find();
+    const productInOrdersId = productInOrders.map(productInOrder => productInOrder.id);
+    await this.orderRepository.productinorders(idOfOrder).patch({isAccepted: false}, {id: {inq: productInOrdersId}});
+    await Promise.all(productInOrders.map(async (productInOrder) => {
+      const product = await this.productRepository.findById(productInOrder.idOfProduct);
+      this.productRepository.updateById(product.id, {countInStock: (product.countInStock + productInOrder.quantity)});
+    }))
+    return await this.orderRepository.findById(idOfOrder)
+  }
 }

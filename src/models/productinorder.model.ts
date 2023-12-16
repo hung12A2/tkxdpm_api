@@ -27,6 +27,13 @@ export class Productinorder extends Entity {
   })
   quantity: number;
 
+  @property({
+    type: 'number',
+    required: false,
+    default: true
+  })
+  isAccepted: boolean;
+
 
   constructor(data?: Partial<Productinorder>) {
     super(data);

@@ -4,7 +4,6 @@ import {
   authenticate
 } from '@loopback/authentication';
 import {TokenServiceBindings} from '@loopback/authentication-jwt';
-import {authorize} from '@loopback/authorization';
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {
@@ -21,8 +20,7 @@ import {UserServiceBindings} from '../keys';
 import {User} from '../models';
 import {Credentials, UserRepository} from '../repositories';
 import {
-  UserManagementService,
-  basicAuthorization
+  UserManagementService
 } from '../services';
 var qs = require('qs');
 var crypto = require('crypto');
@@ -181,7 +179,6 @@ export class UserManagementController {
   }
 
   @authenticate('jwt')
-  @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
   @get('/whoAmI', {
     responses: {
       '200': {

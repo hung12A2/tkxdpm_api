@@ -1,10 +1,11 @@
+import {authenticate} from '@loopback/authentication';
+import {authorize} from '@loopback/authorization';
 import {
   Filter,
   FilterExcludingWhere,
   repository
 } from '@loopback/repository';
 import {
-  del,
   get,
   getModelSchemaRef,
   param,
@@ -15,6 +16,7 @@ import {
 } from '@loopback/rest';
 import {Product} from '../models';
 import {CategoryRepository, ProductRepository} from '../repositories';
+import {basicAuthorization} from '../services';
 
 export class ProductController {
   constructor(
@@ -24,6 +26,8 @@ export class ProductController {
     public categoryRepository: CategoryRepository
   ) { }
 
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
   @post('/products/{idOfCategory}', {
     responses: {
       '200': {
@@ -84,7 +88,8 @@ export class ProductController {
     return this.productRepository.findById(id, filter);
   }
 
-
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
   @put('/products/{id}')
   @response(204, {
     description: 'Product PUT success',
@@ -92,15 +97,19 @@ export class ProductController {
   async replaceById(
     @param.path.string('id') id: string,
     @requestBody() product: Product,
-  ): Promise<void> {
+  ): Promise<any> {
     await this.productRepository.replaceById(id, product);
+    return this.productRepository.findById(id)
   }
 
-  @del('/products/{id}')
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
+  @put('/products/{id}/del')
   @response(204, {
     description: 'Product DELETE success',
   })
-  async deleteById(@param.path.string('id') id: string): Promise<void> {
-    await this.productRepository.deleteById(id);
+  async deleteById(@param.path.string('id') id: string): Promise<any> {
+    await this.productRepository.updateById(id, {isDeleted: true});
+    return this.productRepository.findById(id)
   }
 }
