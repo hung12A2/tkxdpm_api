@@ -207,4 +207,79 @@ export class UserOrderController {
     }))
     return await this.orderRepository.findById(idOfOrder)
   }
+
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
+  @get('/orders', {
+    responses: {
+      '200': {
+        description: 'Array of User has many Order',
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: getModelSchemaRef(Order)},
+          },
+        },
+      },
+    },
+  })
+  async findByAdmin(
+    @param.query.object('filter') filter?: Filter<Order>,
+  ): Promise<any> {
+    const orders = await this.orderRepository.find()
+    const listOrderReturn = await Promise.all(orders.map(async (order) => {
+      const productInOrders = await this.orderRepository.productinorders(order.id).find();
+      const products = await Promise.all((productInOrders).map(async (productInOrder) => {
+        const product = await this.productRepository.findById(productInOrder.idOfProduct);
+        return {
+          ...product,
+          quantity: productInOrder.quantity,
+          totalPrice: productInOrder.quantity * product.price
+        }
+      }))
+      return {
+        ...order,
+        products: products
+      }
+    }))
+
+    return listOrderReturn;
+  }
+
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
+  @get('/orders/{idOfOrder}', {
+    responses: {
+      '200': {
+        description: 'Array of User has many Order',
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: getModelSchemaRef(Order)},
+          },
+        },
+      },
+    },
+  })
+  async find1OrderByAdmin(
+    @param.path.string('idOfOrder') idOfOrder: string,
+    @param.query.object('filter') filter?: Filter<Order>,
+  ): Promise<any> {
+    const orders = await this.orderRepository.find({where: {id: idOfOrder}})
+    const listOrderReturn = await Promise.all(orders.map(async (order) => {
+      const productInOrders = await this.orderRepository.productinorders(order.id).find();
+      const products = await Promise.all((productInOrders).map(async (productInOrder) => {
+        const product = await this.productRepository.findById(productInOrder.idOfProduct);
+        return {
+          ...product,
+          quantity: productInOrder.quantity,
+          totalPrice: productInOrder.quantity * product.price
+        }
+      }))
+      return {
+        ...order,
+        products: products
+      }
+    }))
+
+    return listOrderReturn;
+  }
 }
