@@ -20,9 +20,13 @@ import {
 } from '../models';
 import {CartRepository, OrderRepository, ProductRepository, UserRepository} from '../repositories';
 import {basicAuthorization} from '../services';
+import { RestBindings } from '@loopback/rest';
+import { Response } from '@loopback/rest';
 
 export class UserOrderController {
   constructor(
+    @inject(RestBindings.Http.RESPONSE)
+    private response: Response,
     @repository(UserRepository) protected userRepository: UserRepository,
     @repository(CartRepository) protected cartRepository: CartRepository,
     @repository(ProductRepository) protected productRepository: ProductRepository,
@@ -67,6 +71,7 @@ export class UserOrderController {
     }))
 
     return listOrderReturn;
+  
   }
 
   @authenticate('jwt')
@@ -242,7 +247,9 @@ export class UserOrderController {
       }
     }))
 
-    return listOrderReturn;
+    this.response.header('Access-Control-Expose-Headers', 'Content-Range')
+    return this.response.header('Content-Range', 'orders 0-20/20').send(listOrderReturn);
+
   }
 
   @authenticate('jwt')

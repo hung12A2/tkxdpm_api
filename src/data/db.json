@@ -1,39 +1,12 @@
 {
   "ids": {
-    "User": 3,
-    "Cart": 2,
-    "Category": 3,
-    "Product": 3,
-    "Productincart": 5,
-    "Order": 3,
-    "Productinorder": 5
-  },
-  "models": {
-    "User": {
-      "1": "{\"fullname\":\"string\",\"email\":\"string\",\"gender\":\"string\",\"phonenumber\":\"string\",\"username\":\"customer\",\"password\":\"customer\",\"role\":\"customer\",\"additionalProp1\":{},\"id\":\"1\"}",
-      "2": "{\"fullname\":\"string\",\"email\":\"string\",\"gender\":\"string\",\"phonenumber\":\"string\",\"username\":\"admin\",\"password\":\"admin\",\"role\":\"admin\",\"additionalProp1\":{},\"id\":\"2\"}"
-    },
-    "Cart": {
-      "1": "{\"totalPrice\":291,\"idOfUser\":\"1\",\"id\":\"1\"}"
-    },
-    "Category": {
-      "1": "{\"cateName\":\"cate1\",\"image\":\"string\",\"id\":\"1\"}",
-      "2": "{\"cateName\":\"cate2\",\"image\":\"string\",\"id\":\"2\"}"
-    },
-    "Product": {
-      "1": "{\"name\":\"product1\",\"image\":\"string\",\"idOfCategory\":\"1\",\"productDescription\":\"string\",\"productDetails\":\"string\",\"price\":10,\"countInStock\":26,\"isBestSeller\":true,\"cateName\":\"cate1\",\"id\":\"1\"}",
-      "2": "{\"name\":\"product2\",\"image\":\"string\",\"idOfCategory\":\"1\",\"productDescription\":\"string\",\"productDetails\":\"string\",\"price\":33,\"countInStock\":36,\"isBestSeller\":true,\"cateName\":\"cate1\",\"id\":\"2\"}"
-    },
-    "Productincart": {},
-    "Order": {
-      "1": "{\"idOfUser\":\"1\",\"shippingAddress\":\"khu 3 thanh thuy\",\"paymentMethod\":\"string\",\"shippingPrice\":100,\"totalPrice\":391,\"isAccepted\":false,\"id\":\"1\"}",
-      "2": "{\"idOfUser\":\"1\",\"shippingAddress\":\"string\",\"paymentMethod\":\"string\",\"shippingPrice\":12,\"totalPrice\":303,\"isAccepted\":true,\"id\":\"2\"}"
-    },
-    "Productinorder": {
-      "1": "{\"idOfOrder\":\"1\",\"idOfProduct\":\"1\",\"quantity\":6,\"id\":\"1\",\"isAccepted\":0}",
-      "2": "{\"idOfOrder\":\"1\",\"idOfProduct\":\"2\",\"quantity\":7,\"id\":\"2\",\"isAccepted\":0}",
-      "3": "{\"idOfOrder\":\"2\",\"idOfProduct\":\"1\",\"quantity\":6,\"id\":\"3\"}",
-      "4": "{\"idOfOrder\":\"2\",\"idOfProduct\":\"2\",\"quantity\":7,\"id\":\"4\"}"
-    }
+    "User": 0,
+    "Cart": 0,
+    "Category": 0,
+    "Product": 0,
+    "Productincart": 0,
+    "Order": 0,
+    "Productinorder": 0
   }
-}
+  
+  }

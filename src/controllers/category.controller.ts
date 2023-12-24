@@ -6,6 +6,7 @@ import {
   repository
 } from '@loopback/repository';
 import {
+  del,
   get,
   getModelSchemaRef,
   param,
@@ -17,11 +18,16 @@ import {
 import {Category} from '../models';
 import {CategoryRepository} from '../repositories';
 import {basicAuthorization} from '../services';
+import { inject } from '@loopback/core';
+import { RestBindings } from '@loopback/rest';
+import { Response } from '@loopback/rest';
 
 export class CategoryController {
   constructor(
     @repository(CategoryRepository)
     public categoryRepository: CategoryRepository,
+    @inject(RestBindings.Http.RESPONSE)
+    private response: Response,
   ) { }
 
   @authenticate('jwt')
@@ -37,7 +43,7 @@ export class CategoryController {
         'application/json': {
           schema: getModelSchemaRef(Category, {
             title: 'NewCategory',
-            exclude: ['id'],
+            exclude: ['id','isDeleted'],
           }),
         },
       },
@@ -62,8 +68,10 @@ export class CategoryController {
   })
   async find(
     @param.filter(Category) filter?: Filter<Category>,
-  ): Promise<Category[]> {
-    return this.categoryRepository.find(filter);
+  ): Promise<any> {
+    const data =  await this.categoryRepository.find(filter);
+    this.response.header('Access-Control-Expose-Headers', 'Content-Range')
+    return this.response.header('Content-Range', 'categories 0-20/20').send(data);
   }
 
 

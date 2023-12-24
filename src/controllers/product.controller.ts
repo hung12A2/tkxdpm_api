@@ -17,18 +17,23 @@ import {
 import {Product} from '../models';
 import {CategoryRepository, ProductRepository} from '../repositories';
 import {basicAuthorization} from '../services';
+import { inject } from '@loopback/core';
+import { RestBindings } from '@loopback/rest';
+import { Response } from '@loopback/rest';
 
 export class ProductController {
   constructor(
     @repository(ProductRepository)
     public productRepository: ProductRepository,
     @repository(CategoryRepository)
-    public categoryRepository: CategoryRepository
+    public categoryRepository: CategoryRepository,
+    @inject(RestBindings.Http.RESPONSE)
+    private response: Response,
   ) { }
 
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin'], voters: [basicAuthorization]})
-  @post('/products/{idOfCategory}', {
+  @post('/products/', {
     responses: {
       '200': {
         description: 'Category model instance',
@@ -37,21 +42,20 @@ export class ProductController {
     },
   })
   async createProduct(
-    @param.path.string('idOfCategory') id: string,
     @requestBody({
       content: {
         'application/json': {
           schema: getModelSchemaRef(Product, {
             title: 'NewProductInCategory',
-            exclude: ['id', 'cateName', 'idOfCategory'],
+            exclude: ['id', 'cateName', ],
             optional: ['idOfCategory']
           }),
         },
       },
-    }) product: Omit<Product, 'id' | 'idOfCategory'>,
+    }) product: Omit<Product, 'id' >,
   ): Promise<Product> {
-    product.cateName = (await this.categoryRepository.findById(id)).cateName;
-    return this.categoryRepository.products(id).create(product);
+    product.cateName = (await this.categoryRepository.findById(product.idOfCategory)).cateName;
+    return this.categoryRepository.products(product.idOfCategory).create(product);
   }
 
   @get('/products')
@@ -68,8 +72,10 @@ export class ProductController {
   })
   async find(
     @param.filter(Product) filter?: Filter<Product>,
-  ): Promise<Product[]> {
-    return this.productRepository.find(filter);
+  ): Promise<any> {
+    const data =  await this.productRepository.find(filter);
+    this.response.header('Access-Control-Expose-Headers', 'Content-Range')
+    return this.response.header('Content-Range', 'products 0-20/20').send(data);
   }
 
   @get('/products/{id}')

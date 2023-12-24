@@ -22,18 +22,20 @@ import {
 } from '../models';
 import {CartRepository, ProductRepository} from '../repositories';
 import {basicAuthorization} from '../services';
+import { UserRepository } from '../repositories/';
 
 
 export class CartProductincartController {
   constructor(
-
+    @repository(UserRepository)
+    public userRepository: UserRepository,
     @repository(CartRepository) protected cartRepository: CartRepository,
     @repository(ProductRepository) protected productRepository: ProductRepository,
   ) { }
 
   @authenticate('jwt')
   @authorize({allowedRoles: ['customer'], voters: [basicAuthorization]})
-  @get('/carts/{id}/productincarts', {
+  @get('/carts/productincarts', {
     responses: {
       '200': {
         description: 'Array of Cart has many Productincart',
@@ -50,15 +52,15 @@ export class CartProductincartController {
     currentUserProfile: UserProfile,
     @param.query.object('filter') filter?: Filter<Productincart>,
   ): Promise<any> {
-    const id = currentUserProfile[securityId];
+    const id = (await this.userRepository.cart(currentUserProfile[securityId]).get()).id;
     const cart = await this.cartRepository.findById(id)
     const listProductInCart = this.cartRepository.productincarts(id).find();
     const listProduct = await Promise.all((await listProductInCart).map(async (productInCart) => {
-      const product = await this.productRepository.findById(productInCart.idOfCart);
+      const product = await this.productRepository.findById(productInCart.idOfProduct);
       return {
         ...product,
         quantity: productInCart.quantity,
-        totalPrice: (productInCart.quantity * (await product).price)
+        totalPrice: (productInCart.quantity * (product).price)
       }
     }))
 
@@ -94,7 +96,7 @@ export class CartProductincartController {
       },
     }) productincart: Omit<Productincart, 'id'>,
   ): Promise<any> {
-    const id = currentUserProfile[securityId]
+    const id = (await this.userRepository.cart(currentUserProfile[securityId]).get()).id;
     productincart.idOfCart = id ? id : ""
     productincart.idOfProduct = idOfProduct;
     const product = await this.productRepository.findById(idOfProduct);
@@ -103,7 +105,7 @@ export class CartProductincartController {
     oldtotalPrice = oldtotalPrice ? oldtotalPrice : 0;
     const productArray = await this.cartRepository.productincarts(id).find({where: {idOfProduct: idOfProduct}})
 
-    if (productArray.length == 0) {
+    if (productArray.length === 0) {
       const newtotalPrice = (oldtotalPrice + productincart.quantity * product.price);
       const newCart = Object.assign({totalPrice: newtotalPrice})
       await this.cartRepository.updateById(id, newCart);
@@ -120,7 +122,7 @@ export class CartProductincartController {
 
   @authenticate('jwt')
   @authorize({allowedRoles: ['customer'], voters: [basicAuthorization]})
-  @del('/carts/{id}/productincarts', {
+  @del('/carts/productincarts', {
     responses: {
       '200': {
         description: 'Cart.Productincart DELETE success count',
@@ -133,7 +135,7 @@ export class CartProductincartController {
     currentUserProfile: UserProfile,
     @param.query.object('where', getWhereSchemaFor(Productincart)) where?: Where<Productincart>,
   ): Promise<any> {
-    const id = currentUserProfile[securityId]
+    const id = (await this.userRepository.cart(currentUserProfile[securityId]).get()).id;
     await this.cartRepository.updateById(id, {totalPrice: 0});
     await this.cartRepository.productincarts(id).delete(where);
     return this.cartRepository.findById(id)
