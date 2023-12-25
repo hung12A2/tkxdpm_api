@@ -99,6 +99,7 @@ export class CartProductincartController {
     const id = (await this.userRepository.cart(currentUserProfile[securityId]).get()).id;
     productincart.idOfCart = id ? id : ""
     productincart.idOfProduct = idOfProduct;
+    
     const product = await this.productRepository.findById(idOfProduct);
     const oldCart = await this.cartRepository.findById(id);
     let oldtotalPrice = oldCart.totalPrice
@@ -115,6 +116,10 @@ export class CartProductincartController {
       const newCart = Object.assign({totalPrice: newtotalPrice})
       await this.cartRepository.updateById(id, newCart);
       await this.cartRepository.productincarts(id).patch(productincart, {idOfCart: id, idOfProduct: idOfProduct})
+    }
+
+    if (productincart.quantity === 0) {
+      this.cartRepository.productincarts(id).delete({idOfProduct : idOfProduct})
     }
     return await this.cartRepository.findById(id);
   }

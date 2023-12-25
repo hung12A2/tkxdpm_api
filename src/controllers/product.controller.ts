@@ -102,8 +102,9 @@ export class ProductController {
   })
   async replaceById(
     @param.path.string('id') id: string,
-    @requestBody() product: Product,
+    @requestBody() product: Omit<Product, 'id' >,
   ): Promise<any> {
+    product.cateName = (await this.categoryRepository.findById(product.idOfCategory)).cateName;
     await this.productRepository.replaceById(id, product);
     return this.productRepository.findById(id)
   }

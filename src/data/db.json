@@ -1,12 +1,44 @@
 {
   "ids": {
-    "User": 0,
-    "Cart": 0,
-    "Category": 0,
-    "Product": 0,
-    "Productincart": 0,
-    "Order": 0,
-    "Productinorder": 0
+    "User": 3,
+    "Cart": 2,
+    "Category": 3,
+    "Product": 6,
+    "Productincart": 15,
+    "Order": 3,
+    "Productinorder": 5
+  },
+  "models": {
+    "Product": {
+      "1": "{\"id\":\"1\",\"name\":\"Truyện harry porter\",\"image\":\"https://i.truyenvua.com/slider/290x191/slider_1560493497.jpg?gt=hdfgdfg&mobile=2\",\"idOfCategory\":\"1\",\"productDescription\":\"rất hay\",\"productDetails\":\"rấthay\",\"price\":123,\"countInStock\":68,\"isBestSeller\":true,\"cateName\":\"Truyện tranh update lần 3\",\"isDeleted\":\"false\"}",
+      "2": "{\"id\":\"2\",\"name\":\"Truyện harry porter 2 \",\"image\":\"https://i.truyenvua.com/ebook/190x247/dau-la-dai-luc-2_1552570878.jpg?gt=hdfgdfg&mobile=2\",\"idOfCategory\":\"1\",\"productDescription\":\"truyện rất hay\",\"productDetails\":\"truyện đấm nhau \",\"price\":70,\"countInStock\":15,\"isBestSeller\":true,\"cateName\":\"Truyện tranh update lần 1\",\"isDeleted\":\"true\"}",
+      "3": "{\"name\":\"Đĩa truyện ma \",\"image\":\"https://th.bing.com/th/id/R.390de29d99ce1480c1abc0ef0ff6b40a?rik=6%2f0FfCHybVRY%2bw&pid=ImgRaw&r=0\",\"idOfCategory\":\"2\",\"productDescription\":\"Sợ vl\",\"productDetails\":\"Sợ\",\"price\":125,\"countInStock\":102,\"isBestSeller\":true,\"cateName\":\"Đĩa nhạc\",\"isDeleted\":false,\"id\":\"3\"}",
+      "4": "{\"name\":\"Hung Nguyen\",\"image\":\"https://hoaianshop.com/wp-content/uploads/2021/02/hinh-anh-con-cho.jpg\",\"idOfCategory\":\"1\",\"productDescription\":\"sản phẩm rất tốt, nghe rất hay\",\"productDetails\":\"không có\",\"price\":30,\"countInStock\":15,\"isBestSeller\":false,\"cateName\":\"Truyện tranh \",\"isDeleted\":false,\"id\":\"4\"}",
+      "5": "{\"name\":\"Đĩa nhạc vàng\",\"image\":\"https://th.bing.com/th/id/OIP.yjricYTc4HuUj364CNTjswAAAA?rs=1&pid=ImgDetMain\",\"idOfCategory\":\"2\",\"productDescription\":\"nghe êm tai\",\"productDetails\":\"nghe êm tai\",\"price\":79,\"countInStock\":15,\"isBestSeller\":true,\"cateName\":\"đĩa nhạc update 4\",\"isDeleted\":false,\"id\":\"5\"}"
+    },
+    "Category": {
+      "1": "{\"id\":\"1\",\"cateName\":\"Truyện tranh update lần 3\",\"image\":\"https://salt.tikicdn.com/cache/w1200/media/catalog/product/i/m/img038_1_1.jpg\",\"isDeleted\":\"true\"}",
+      "2": "{\"id\":\"2\",\"cateName\":\"đĩa nhạc update 4\",\"image\":\"https://icdn.dantri.com.vn/thumb_w/640/2019/03/04/dia-than-1551664709441.jpg\",\"isDeleted\":\"true\"}"
+    },
+    "User": {
+      "1": "{\"fullname\":\"Hung Nguyen\",\"email\":\"hung.nv204563@sis.hust.edu.vn\",\"gender\":\"Nam\",\"phonenumber\":\"12345678\",\"username\":\"customer\",\"password\":\"customer\",\"role\":\"customer\",\"id\":\"1\"}",
+      "2": "{\"fullname\":\"string\",\"email\":\"string\",\"gender\":\"string\",\"phonenumber\":\"string\",\"username\":\"admin\",\"password\":\"admin\",\"role\":\"admin\",\"additionalProp1\":{},\"id\":\"2\"}"
+    },
+    "Cart": {
+      "1": "{\"totalPrice\":79,\"idOfUser\":\"1\",\"id\":\"1\"}"
+    },
+    "Order": {
+      "1": "{\"idOfUser\":\"1\",\"shippingAddress\":\"Thanh thủy phú thọ\",\"paymentMethod\":\"Tiền mặt\",\"shippingPrice\":100,\"totalPrice\":471,\"isAccepted\":false,\"id\":\"1\"}",
+      "2": "{\"idOfUser\":\"1\",\"shippingAddress\":\"thanh thủy phú thọ\",\"paymentMethod\":\"tiền mặt\",\"shippingPrice\":68,\"totalPrice\":562,\"isAccepted\":false,\"id\":\"2\"}"
+    },
+    "Productincart": {
+      "13": "{\"idOfCart\":\"1\",\"idOfProduct\":\"5\",\"quantity\":1,\"id\":\"13\"}"
+    },
+    "Productinorder": {
+      "1": "{\"idOfOrder\":\"1\",\"idOfProduct\":\"1\",\"quantity\":2,\"isAccepted\":0,\"id\":\"1\"}",
+      "2": "{\"idOfOrder\":\"1\",\"idOfProduct\":\"3\",\"quantity\":1,\"isAccepted\":0,\"id\":\"2\"}",
+      "3": "{\"idOfOrder\":\"2\",\"idOfProduct\":\"1\",\"quantity\":3,\"isAccepted\":0,\"id\":\"3\"}",
+      "4": "{\"idOfOrder\":\"2\",\"idOfProduct\":\"3\",\"quantity\":1,\"isAccepted\":0,\"id\":\"4\"}"
+    }
   }
-  
-  }
+}

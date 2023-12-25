@@ -150,6 +150,7 @@ export class UserOrderController {
     const cartid = (await (this.userRepository.cart(id).get())).id;
     const productincarts = await this.cartRepository.productincarts(cartid).find();
     await this.cartRepository.productincarts(cartid).delete();
+    await this.cartRepository.updateById(cartid, {totalPrice:0});
     await Promise.all(productincarts.map(async (productincart) => {
       const product = await this.productRepository.findById(productincart.idOfProduct);
       await this.productRepository.updateById(product.id, {countInStock: (product.countInStock - productincart.quantity)})
