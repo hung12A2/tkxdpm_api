@@ -4,7 +4,7 @@
     "Cart": 2,
     "Category": 3,
     "Product": 6,
-    "Productincart": 15,
+    "Productincart": 16,
     "Order": 3,
     "Productinorder": 5
   },
@@ -25,15 +25,13 @@
       "2": "{\"fullname\":\"string\",\"email\":\"string\",\"gender\":\"string\",\"phonenumber\":\"string\",\"username\":\"admin\",\"password\":\"admin\",\"role\":\"admin\",\"additionalProp1\":{},\"id\":\"2\"}"
     },
     "Cart": {
-      "1": "{\"totalPrice\":79,\"idOfUser\":\"1\",\"id\":\"1\"}"
+      "1": "{\"totalPrice\":0,\"idOfUser\":\"1\",\"id\":\"1\"}"
     },
     "Order": {
       "1": "{\"idOfUser\":\"1\",\"shippingAddress\":\"Thanh thủy phú thọ\",\"paymentMethod\":\"Tiền mặt\",\"shippingPrice\":100,\"totalPrice\":471,\"isAccepted\":false,\"id\":\"1\"}",
       "2": "{\"idOfUser\":\"1\",\"shippingAddress\":\"thanh thủy phú thọ\",\"paymentMethod\":\"tiền mặt\",\"shippingPrice\":68,\"totalPrice\":562,\"isAccepted\":false,\"id\":\"2\"}"
     },
-    "Productincart": {
-      "13": "{\"idOfCart\":\"1\",\"idOfProduct\":\"5\",\"quantity\":1,\"id\":\"13\"}"
-    },
+    "Productincart": {},
     "Productinorder": {
       "1": "{\"idOfOrder\":\"1\",\"idOfProduct\":\"1\",\"quantity\":2,\"isAccepted\":0,\"id\":\"1\"}",
       "2": "{\"idOfOrder\":\"1\",\"idOfProduct\":\"3\",\"quantity\":1,\"isAccepted\":0,\"id\":\"2\"}",
