@@ -4,13 +4,13 @@
     "Cart": 2,
     "Category": 3,
     "Product": 6,
-    "Productincart": 16,
+    "Productincart": 18,
     "Order": 3,
     "Productinorder": 5
   },
   "models": {
     "Product": {
-      "1": "{\"id\":\"1\",\"name\":\"Truyện harry porter\",\"image\":\"https://i.truyenvua.com/slider/290x191/slider_1560493497.jpg?gt=hdfgdfg&mobile=2\",\"idOfCategory\":\"1\",\"productDescription\":\"rất hay\",\"productDetails\":\"rấthay\",\"price\":123,\"countInStock\":68,\"isBestSeller\":true,\"cateName\":\"Truyện tranh update lần 3\",\"isDeleted\":\"false\"}",
+      "1": "{\"id\":\"1\",\"name\":\"Truyện harry porter\",\"image\":\"https://i.truyenvua.com/slider/290x191/slider_1560493497.jpg?gt=hdfgdfg&mobile=2\",\"idOfCategory\":\"1\",\"productDescription\":\"rất hay abc\",\"productDetails\":\"rấthay\",\"price\":123,\"countInStock\":68,\"isBestSeller\":true,\"cateName\":\"Truyện tranh update lần 3\",\"isDeleted\":\"true\"}",
       "2": "{\"id\":\"2\",\"name\":\"Truyện harry porter 2 \",\"image\":\"https://i.truyenvua.com/ebook/190x247/dau-la-dai-luc-2_1552570878.jpg?gt=hdfgdfg&mobile=2\",\"idOfCategory\":\"1\",\"productDescription\":\"truyện rất hay\",\"productDetails\":\"truyện đấm nhau \",\"price\":70,\"countInStock\":15,\"isBestSeller\":true,\"cateName\":\"Truyện tranh update lần 1\",\"isDeleted\":\"true\"}",
       "3": "{\"name\":\"Đĩa truyện ma \",\"image\":\"https://th.bing.com/th/id/R.390de29d99ce1480c1abc0ef0ff6b40a?rik=6%2f0FfCHybVRY%2bw&pid=ImgRaw&r=0\",\"idOfCategory\":\"2\",\"productDescription\":\"Sợ vl\",\"productDetails\":\"Sợ\",\"price\":125,\"countInStock\":102,\"isBestSeller\":true,\"cateName\":\"Đĩa nhạc\",\"isDeleted\":false,\"id\":\"3\"}",
       "4": "{\"name\":\"Hung Nguyen\",\"image\":\"https://hoaianshop.com/wp-content/uploads/2021/02/hinh-anh-con-cho.jpg\",\"idOfCategory\":\"1\",\"productDescription\":\"sản phẩm rất tốt, nghe rất hay\",\"productDetails\":\"không có\",\"price\":30,\"countInStock\":15,\"isBestSeller\":false,\"cateName\":\"Truyện tranh \",\"isDeleted\":false,\"id\":\"4\"}",
