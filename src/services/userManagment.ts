@@ -14,8 +14,7 @@ export class UserManagementService implements UserService<User, Credentials> {
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
-
-  ) { }
+  ) {}
 
   async verifyCredentials(credentials: Credentials): Promise<User> {
     const {username, password} = credentials;
@@ -24,9 +23,14 @@ export class UserManagementService implements UserService<User, Credentials> {
     if (!username) {
       throw new HttpErrors.Unauthorized(invalidCredentialsError);
     }
+    if (!password) {
+      throw new HttpErrors.Unauthorized(invalidCredentialsError);
+    }
     const foundUser = await this.userRepository.findOne({
       where: {username},
     });
+    if (foundUser?.password !== password)
+      throw new HttpErrors.Unauthorized(invalidCredentialsError);
     if (!foundUser) {
       throw new HttpErrors.Unauthorized(invalidCredentialsError);
     }
@@ -46,17 +50,17 @@ export class UserManagementService implements UserService<User, Credentials> {
         username: user.username,
         id: user.id,
         role: user.role,
-      }
-    }
-    else return {
-      [securityId]: '',
-      fullname: user.fullname,
-      email: user.email,
-      gender: user.gender,
-      phonenumber: user.phonenumber,
-      username: user.username,
-      id: user.id,
-      role: user.role,
-    }
+      };
+    } else
+      return {
+        [securityId]: '',
+        fullname: user.fullname,
+        email: user.email,
+        gender: user.gender,
+        phonenumber: user.phonenumber,
+        username: user.username,
+        id: user.id,
+        role: user.role,
+      };
   }
 }

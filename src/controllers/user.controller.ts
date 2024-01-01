@@ -1,7 +1,7 @@
 import {
   TokenService,
   UserService,
-  authenticate
+  authenticate,
 } from '@loopback/authentication';
 import {TokenServiceBindings} from '@loopback/authentication-jwt';
 import {inject} from '@loopback/core';
@@ -13,18 +13,19 @@ import {
   get,
   getModelSchemaRef,
   post,
-  requestBody
+  requestBody,
 } from '@loopback/rest';
 import {SecurityBindings, UserProfile, securityId} from '@loopback/security';
 import {UserServiceBindings} from '../keys';
 import {User} from '../models';
 import {Credentials, UserRepository} from '../repositories';
+import {UserManagementService} from '../services';
 import {
-  UserManagementService
-} from '../services';
-var qs = require('qs');
-var crypto = require('crypto');
-
+  checkValidEmail,
+  checkValidGender,
+  checkValidPassword,
+  checkValidPhoneNumber,
+} from '../services/checkValid';
 
 export class UserManagementController {
   constructor(
@@ -37,8 +38,8 @@ export class UserManagementController {
     @inject(UserServiceBindings.USER_SERVICE)
     public userManagementService: UserManagementService,
     @inject(RestBindings.Http.RESPONSE) private response: Response,
-    @inject(RestBindings.Http.REQUEST) private request: Request
-  ) { }
+    @inject(RestBindings.Http.REQUEST) private request: Request,
+  ) {}
 
   @post('/users/customer', {
     responses: {
@@ -60,22 +61,47 @@ export class UserManagementController {
         'application/json': {
           schema: getModelSchemaRef(User, {
             title: 'NewUser',
-            exclude: ['id', 'role']
+            exclude: ['id', 'role'],
           }),
         },
       },
     })
-    newUserRequest: User
+    newUserRequest: User,
   ): Promise<any> {
     // All new users have the "customer" role by default
     newUserRequest.role = 'customer';
 
     try {
-
-      if ((await this.userRepository.find({where: {username: newUserRequest.username}})).length > 0) {
-        return this.response.status(400).send("Đã tồn tại username này rồi");
+      if (
+        (
+          await this.userRepository.find({
+            where: {username: newUserRequest.username},
+          })
+        ).length > 0
+      ) {
+        return this.response
+          .send({message: 'Đã tồn tại username này rồi '})
+          .status(422);
       }
-      const data = await (this.userRepository.create(newUserRequest));
+      if (!checkValidPhoneNumber(newUserRequest.phonenumber))
+        return this.response
+          .send({message: 'Số điện thoại không phù hợp'})
+          .status(422);
+
+      if (!checkValidEmail(newUserRequest.email))
+        return this.response.send({message: 'Email không hợp lệ'}).status(422);
+
+      if (!checkValidPassword(newUserRequest.password))
+        return this.response
+          .send({message: 'Mật khẩu không đủ 6 kí tự'})
+          .status(422);
+
+      if (!checkValidGender(newUserRequest.gender))
+        return this.response
+          .send({message: 'Giới tính là Nam Nữ hoặc Khác'})
+          .status(422);
+
+      const data = await this.userRepository.create(newUserRequest);
       await this.userRepository.cart(data.id).create({});
       return data;
     } catch (error) {
@@ -103,7 +129,7 @@ export class UserManagementController {
         'application/json': {
           schema: getModelSchemaRef(User, {
             title: 'NewUser',
-            exclude: ['id']
+            exclude: ['id'],
           }),
         },
       },
@@ -114,9 +140,13 @@ export class UserManagementController {
     newUserRequest.role = 'admin';
 
     try {
-      const list = await this.userRepository.find({where: {username: newUserRequest.username}})
+      const list = await this.userRepository.find({
+        where: {username: newUserRequest.username},
+      });
       if (list.length > 0) {
-        return this.response.status(400).send("Đã tồn tại username này rồi");
+        return this.response
+          .status(422)
+          .send({message: 'Đã tồn tại username này rồi'});
       }
       const data = await this.userRepository.create(newUserRequest);
       return data;
@@ -146,7 +176,7 @@ export class UserManagementController {
   })
   async login(
     @requestBody({
-      description: "The input of login function",
+      description: 'The input of login function',
       required: true,
       content: {
         'application/json': {
@@ -158,13 +188,14 @@ export class UserManagementController {
                 type: 'string',
               },
               password: {
-                type: 'string'
-              }
-            }
-          }
-        }
-      }
-    }) credentials: Credentials
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+    })
+    credentials: Credentials,
   ): Promise<{token: string}> {
     // ensure the user exists, and the password is correct
     const user = await this.userService.verifyCredentials(credentials);

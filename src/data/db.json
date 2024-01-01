@@ -1,9 +1,9 @@
 {
   "ids": {
-    "User": 3,
-    "Cart": 2,
-    "Category": 3,
-    "Product": 6,
+    "User": 7,
+    "Cart": 6,
+    "Category": 7,
+    "Product": 8,
     "Productincart": 18,
     "Order": 3,
     "Productinorder": 5
@@ -13,19 +13,33 @@
       "1": "{\"id\":\"1\",\"name\":\"Truyện harry porter\",\"image\":\"https://i.truyenvua.com/slider/290x191/slider_1560493497.jpg?gt=hdfgdfg&mobile=2\",\"idOfCategory\":\"1\",\"productDescription\":\"rất hay abc\",\"productDetails\":\"rấthay\",\"price\":123,\"countInStock\":68,\"isBestSeller\":true,\"cateName\":\"Truyện tranh update lần 3\",\"isDeleted\":\"true\"}",
       "2": "{\"id\":\"2\",\"name\":\"Truyện harry porter 2 \",\"image\":\"https://i.truyenvua.com/ebook/190x247/dau-la-dai-luc-2_1552570878.jpg?gt=hdfgdfg&mobile=2\",\"idOfCategory\":\"1\",\"productDescription\":\"truyện rất hay\",\"productDetails\":\"truyện đấm nhau \",\"price\":70,\"countInStock\":15,\"isBestSeller\":true,\"cateName\":\"Truyện tranh update lần 1\",\"isDeleted\":\"true\"}",
       "3": "{\"name\":\"Đĩa truyện ma \",\"image\":\"https://th.bing.com/th/id/R.390de29d99ce1480c1abc0ef0ff6b40a?rik=6%2f0FfCHybVRY%2bw&pid=ImgRaw&r=0\",\"idOfCategory\":\"2\",\"productDescription\":\"Sợ vl\",\"productDetails\":\"Sợ\",\"price\":125,\"countInStock\":102,\"isBestSeller\":true,\"cateName\":\"Đĩa nhạc\",\"isDeleted\":false,\"id\":\"3\"}",
-      "4": "{\"name\":\"Hung Nguyen\",\"image\":\"https://hoaianshop.com/wp-content/uploads/2021/02/hinh-anh-con-cho.jpg\",\"idOfCategory\":\"1\",\"productDescription\":\"sản phẩm rất tốt, nghe rất hay\",\"productDetails\":\"không có\",\"price\":30,\"countInStock\":15,\"isBestSeller\":false,\"cateName\":\"Truyện tranh \",\"isDeleted\":false,\"id\":\"4\"}",
-      "5": "{\"name\":\"Đĩa nhạc vàng\",\"image\":\"https://th.bing.com/th/id/OIP.yjricYTc4HuUj364CNTjswAAAA?rs=1&pid=ImgDetMain\",\"idOfCategory\":\"2\",\"productDescription\":\"nghe êm tai\",\"productDetails\":\"nghe êm tai\",\"price\":79,\"countInStock\":15,\"isBestSeller\":true,\"cateName\":\"đĩa nhạc update 4\",\"isDeleted\":false,\"id\":\"5\"}"
+      "4": "{\"id\":\"4\",\"name\":\"string c\",\"image\":\"string\",\"idOfCategory\":\"3\",\"productDescription\":\"string\",\"productDetails\":\"string\",\"price\":0,\"countInStock\":0,\"isBestSeller\":true,\"cateName\":\"cate 5 fix\",\"isDeleted\":\"string\"}",
+      "5": "{\"name\":\"Đĩa nhạc vàng\",\"image\":\"https://th.bing.com/th/id/OIP.yjricYTc4HuUj364CNTjswAAAA?rs=1&pid=ImgDetMain\",\"idOfCategory\":\"2\",\"productDescription\":\"nghe êm tai\",\"productDetails\":\"nghe êm tai\",\"price\":79,\"countInStock\":15,\"isBestSeller\":true,\"cateName\":\"đĩa nhạc update 4\",\"isDeleted\":false,\"id\":\"5\"}",
+      "6": "{\"name\":\"string\",\"image\":\"string\",\"idOfCategory\":\"3\",\"productDescription\":\"string\",\"productDetails\":\"string\",\"price\":0,\"countInStock\":0,\"isBestSeller\":true,\"cateName\":\"cate 5 fix\",\"isDeleted\":\"string\",\"id\":\"6\"}",
+      "7": "{\"name\":\"Đĩa nhạc\",\"image\":\"https://hoaianshop.com/wp-content/uploads/2021/02/hinh-anh-con-cho.jpg\",\"idOfCategory\":\"3\",\"productDescription\":\"không có\",\"productDetails\":\"truyện đấm nhau \",\"price\":30,\"countInStock\":126,\"isBestSeller\":true,\"cateName\":\"cate 5 fix\",\"isDeleted\":false,\"id\":\"7\"}"
     },
     "Category": {
-      "1": "{\"id\":\"1\",\"cateName\":\"Truyện tranh update lần 3\",\"image\":\"https://salt.tikicdn.com/cache/w1200/media/catalog/product/i/m/img038_1_1.jpg\",\"isDeleted\":\"true\"}",
-      "2": "{\"id\":\"2\",\"cateName\":\"đĩa nhạc update 4\",\"image\":\"https://icdn.dantri.com.vn/thumb_w/640/2019/03/04/dia-than-1551664709441.jpg\",\"isDeleted\":\"true\"}"
+      "1": "{\"id\":\"1\",\"cateName\":\"lần 5\",\"image\":\"https://salt.tikicdn.com/cache/w1200/media/catalog/product/i/m/img038_1_1.jpg\",\"isDeleted\":\"true\"}",
+      "2": "{\"id\":\"2\",\"cateName\":\"đĩa nhạc update 4\",\"image\":\"https://icdn.dantri.com.vn/thumb_w/640/2019/03/04/dia-than-1551664709441.jpg\",\"isDeleted\":\"true\"}",
+      "3": "{\"id\":\"3\",\"cateName\":\"cate 5 fix\",\"image\":\"https://i.truyenvua.com/ebook/190x247/ban-thiet-ke-vang_1704082663.jpg?gt=hdfgdfg&mobile=2\",\"isDeleted\":\"false\"}",
+      "4": "{\"cateName\":\"cate 6 \",\"image\":\"https://i.truyenvua.com/ebook/190x247/ban-thiet-ke-vang_1704082663.jpg?gt=hdfgdfg&mobile=2\",\"isDeleted\":false,\"id\":\"4\"}",
+      "5": "{\"cateName\":\"cate 6\",\"image\":\"https://hoaianshop.com/wp-content/uploads/2021/02/hinh-anh-con-cho.jpg\",\"isDeleted\":false,\"id\":\"5\"}",
+      "6": "{\"cateName\":\"cat7\",\"image\":\"https://i5.walmartimages.com/asr/e03de7a8-c0a3-48ed-a107-6eec5ebddfaa_1.920a6b4429182a0c2a9291ff5824464f.jpeg\",\"isDeleted\":false,\"id\":\"6\"}"
     },
     "User": {
       "1": "{\"fullname\":\"Hung Nguyen\",\"email\":\"hung.nv204563@sis.hust.edu.vn\",\"gender\":\"Nam\",\"phonenumber\":\"12345678\",\"username\":\"customer\",\"password\":\"customer\",\"role\":\"customer\",\"id\":\"1\"}",
-      "2": "{\"fullname\":\"string\",\"email\":\"string\",\"gender\":\"string\",\"phonenumber\":\"string\",\"username\":\"admin\",\"password\":\"admin\",\"role\":\"admin\",\"additionalProp1\":{},\"id\":\"2\"}"
+      "2": "{\"fullname\":\"string\",\"email\":\"string\",\"gender\":\"string\",\"phonenumber\":\"string\",\"username\":\"admin\",\"password\":\"admin\",\"role\":\"admin\",\"additionalProp1\":{},\"id\":\"2\"}",
+      "3": "{\"fullname\":\"Hung Nguyen\",\"email\":\"hung.nv204563@sis.hust.edu.vn\",\"gender\":\"Nam\",\"phonenumber\":\"12345678\",\"username\":\"customer2\",\"password\":\"customer\",\"role\":\"customer\",\"id\":\"3\"}",
+      "4": "{\"fullname\":\"string\",\"email\":\"hung@gmail.com\",\"gender\":\"string\",\"phonenumber\":\"0915047678\",\"username\":\"string\",\"password\":\"string\",\"role\":\"customer\",\"additionalProp1\":{},\"id\":\"4\"}",
+      "5": "{\"fullname\":\"Hung Nguyen\",\"email\":\"hung.nv204563@gmail.com\",\"gender\":\"Nam\",\"phonenumber\":\"0915047678\",\"username\":\"hung.nguyen2\",\"password\":\"123456\",\"role\":\"customer\",\"id\":\"5\"}",
+      "6": "{\"fullname\":\"Hung Nguyen\",\"email\":\"hung.nv204563@gmail.com\",\"gender\":\"Nam\",\"phonenumber\":\"0915047678\",\"username\":\"hung.nguyen23\",\"password\":\"123456\",\"role\":\"customer\",\"id\":\"6\"}"
     },
     "Cart": {
-      "1": "{\"totalPrice\":0,\"idOfUser\":\"1\",\"id\":\"1\"}"
+      "1": "{\"totalPrice\":0,\"idOfUser\":\"1\",\"id\":\"1\"}",
+      "2": "{\"totalPrice\":0,\"idOfUser\":\"3\",\"id\":\"2\"}",
+      "3": "{\"totalPrice\":0,\"idOfUser\":\"4\",\"id\":\"3\"}",
+      "4": "{\"totalPrice\":0,\"idOfUser\":\"5\",\"id\":\"4\"}",
+      "5": "{\"totalPrice\":0,\"idOfUser\":\"6\",\"id\":\"5\"}"
     },
     "Order": {
       "1": "{\"idOfUser\":\"1\",\"shippingAddress\":\"Thanh thủy phú thọ\",\"paymentMethod\":\"Tiền mặt\",\"shippingPrice\":100,\"totalPrice\":471,\"isAccepted\":false,\"id\":\"1\"}",
