@@ -40,7 +40,7 @@ export class CategoryController {
     description: 'Category model instance',
     content: {'application/json': {schema: getModelSchemaRef(Category)}},
   })
-  async create(
+  async createCategory(
     @requestBody({
       content: {
         'application/json': {
@@ -85,7 +85,7 @@ export class CategoryController {
       },
     },
   })
-  async find(@param.filter(Category) filter?: Filter<Category>): Promise<any> {
+  async getAllCategories(@param.filter(Category) filter?: Filter<Category>): Promise<any> {
     const data = await this.categoryRepository.find(filter);
     this.response.header('Access-Control-Expose-Headers', 'Content-Range');
     return this.response
@@ -114,7 +114,7 @@ export class CategoryController {
   @response(204, {
     description: 'Category PUT success',
   })
-  async replaceById(
+  async replaceCategoryById(
     @param.path.string('id') id: string,
     @requestBody() category: Category,
   ): Promise<any> {
@@ -140,7 +140,7 @@ export class CategoryController {
   @response(204, {
     description: 'Category DELETE success',
   })
-  async deleteById(@param.path.string('id') id: string): Promise<void> {
+  async deleteCategoryById(@param.path.string('id') id: string): Promise<void> {
     await this.categoryRepository.updateById(id, {isDeleted: true});
   }
 }

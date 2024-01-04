@@ -249,7 +249,7 @@ export class UserOrderController {
       },
     },
   })
-  async patchByAdmin(
+  async refuseOrderByAdmin (
     @param.path.string('idOfOrder') idOfOrder: string,
   ): Promise<any> {
     await this.orderRepository.updateById(idOfOrder, {isAccepted: false});
@@ -289,7 +289,7 @@ export class UserOrderController {
       },
     },
   })
-  async findByAdmin(
+  async getAllOrderByAdmin(
     @param.query.object('filter') filter?: Filter<Order>,
   ): Promise<any> {
     const orders = await this.orderRepository.find();

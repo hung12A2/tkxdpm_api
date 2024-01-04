@@ -91,7 +91,7 @@ export class ProductController {
       },
     },
   })
-  async find(@param.filter(Product) filter?: Filter<Product>): Promise<any> {
+  async getAllProducts(@param.filter(Product) filter?: Filter<Product>): Promise<any> {
     const data = await this.productRepository.find(filter);
     this.response.header('Access-Control-Expose-Headers', 'Content-Range');
     return this.response.header('Content-Range', 'products 0-20/20').send(data);
@@ -120,7 +120,7 @@ export class ProductController {
   @response(204, {
     description: 'Product PUT success',
   })
-  async replaceById(
+  async replaceProductById(
     @param.path.string('id') id: string,
     @requestBody() product: Omit<Product, 'id'>,
   ): Promise<any> {
@@ -157,7 +157,7 @@ export class ProductController {
   @response(204, {
     description: 'Product DELETE success',
   })
-  async deleteById(@param.path.string('id') id: string): Promise<any> {
+  async deleteProductById(@param.path.string('id') id: string): Promise<any> {
     await this.productRepository.updateById(id, {isDeleted: true});
     return this.productRepository.findById(id);
   }
