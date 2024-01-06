@@ -23,7 +23,7 @@ export class Category extends Entity {
   image: string;
 
   @property({
-    type: 'string',
+    type: 'boolean',
     required: false,
     default: false
   })

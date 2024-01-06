@@ -28,7 +28,7 @@ export class Productinorder extends Entity {
   quantity: number;
 
   @property({
-    type: 'number',
+    type: 'boolean',
     required: false,
     default: true
   })

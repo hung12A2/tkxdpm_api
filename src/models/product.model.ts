@@ -64,7 +64,7 @@ export class Product extends Entity {
   cateName: string;
 
   @property({
-    type: 'string',
+    type: 'boolean',
     required: false,
     default: false
   })
